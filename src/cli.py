@@ -51,6 +51,33 @@ def callback(
         kaggle_username=kaggle_username,
         kaggle_key=kaggle_key,
     )
+@cli.command()
+def download_dataset(
+        kaggle_username: str = typer.Option(None, envvar="KAGGLE_USERNAME", help="Nom d'utilisateur à l'API Kaggle."),
+        kaggle_key: str = typer.Option(None, envvar="KAGGLE_KEY", help="Token d'accès à l'API Kaggle."),
+
+        kaggle_dataset: str = typer.Argument('antoinecastel/fen-to-stockfish-evaluation',
+                                             help="Nom du jeu de données Kaggle à télécharger."),
+):
+    """
+    Télécharge le jeu de données depuis Kaggle.
+
+    Args:
+        kaggle_username (str): Nom d'utilisateur à l'API Kaggle.
+        kaggle_key (str): Token d'accès à l'API Kaggle.
+        kaggle_dataset (str): Nom du jeu de données Kaggle à télécharger.
+    """
+    load_dotenv_kaggle(kaggle_username, kaggle_key)
+
+    import kaggle
+
+    kaggle.api.authenticate()
+
+    kaggle.api.dataset_download_files(
+        kaggle_dataset,
+        path=DATA_PATH,
+        unzip=True
+    )
 
 
 def main():
