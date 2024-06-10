@@ -80,6 +80,31 @@ def download_dataset(
     )
 
 
+@cli.command()
+def train(
+        kaggle_dataset: str = typer.Argument('antoinecastel/fen-to-stockfish-evaluation', help="Nom du jeu de données Kaggle à télécharger."),
+):
+    """
+    Entraîne le modèle.
+
+    Args:
+        kaggle_dataset (str): Nom du jeu de données Kaggle à télécharger.
+    """
+    # Todo : Implémenter la fonction d'entraînement du modèle.
+    logging.info("Entraînement du modèle.")
+
+    # Récupère le nom du fichier
+    filename = kaggle_dataset.split('/')[1]
+    filename = filename.replace('-', '_')
+
+    dataset_path = DATA_PATH / f'{filename}.csv'
+
+    if not dataset_path.exists():
+        raise FileNotFoundError(f"Le dataset n'existe pas. Veuillez le télécharger avec la commande 'download_dataset {kaggle_dataset}'. ('{dataset_path}")
+
+    # Todo : Implémenter la fonction d'entraînement du modèle.
+
+
 def main():
     """
     Fonction principale du programme.
