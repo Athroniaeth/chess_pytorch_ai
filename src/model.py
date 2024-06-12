@@ -22,3 +22,7 @@ class ChessModel(nn.Module):
         _x = self.relu(self.linear_4(_x))
         _x = self.sigmoid(self.linear_5(_x))
         return _x
+
+    @property
+    def device(self) -> torch.device:
+        return next(self.parameters()).device
