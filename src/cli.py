@@ -123,8 +123,8 @@ def train(
         lr: float = typer.Option(1e-4, help="Taux d'apprentissage."),
 
         start_factor: float = typer.Option(1.0, help="Facteur de départ pour le scheduler."),
-        end_factor: float = typer.Option(0.25, help="Facteur de fin pour le scheduler."),
-        total_iters: int = typer.Option(10, help="Nombre total d'itérations."),
+        end_factor: float = typer.Option(0.1, help="Facteur de fin pour le scheduler."),
+        total_iters: int = typer.Option(15, help="Nombre total d'itérations."),
 
         # Paramètres du dataset
         batch_size: int = typer.Option(256, help="Taille du batch."),
@@ -134,7 +134,6 @@ def train(
         ratio_validation: float = typer.Option(0.2, help="Ratio du dataset pour la validation."),
 
         # Autres paramètres
-        tolerance: float = typer.Option(1e-2, help="Tolérance pour l'accuracy de différence entre le label et la prédiction (en %)."),
         device: str = typer.Option('cuda', help="Device utilisé pour l'entraînement. (cpu, cuda)"),
 ):
     """
@@ -155,7 +154,6 @@ def train(
         ratio_tests (float): Ratio du dataset pour les tests.
         ratio_validation (float): Ratio du dataset pour la validation.
 
-        tolerance (float): Tolérance pour l'accuracy de différence entre le label et la prédiction (en %).
         device (Literal['cpu', 'cuda']): Device utilisé pour l'entraînement.
     """
     # Todo : Implémenter la fonction d'entraînement du modèle.
@@ -197,7 +195,6 @@ def train(
         device=device,
 
         lr=lr,
-        tolerance=tolerance,
         start_factor=start_factor,
         end_factor=end_factor,
         total_iters=total_iters
