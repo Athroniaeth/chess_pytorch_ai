@@ -69,6 +69,7 @@ def download(
         kaggle_username: str = typer.Option(None, envvar="KAGGLE_USERNAME", help="Nom d'utilisateur à l'API Kaggle."),
         kaggle_key: str = typer.Option(None, envvar="KAGGLE_KEY", help="Token d'accès à l'API Kaggle."),
 
+        input_filename: str = typer.Option("chessData.csv", help="Nom du fichier de données d'entrée."),
         output_filename: str = typer.Option("preprocess.parquet", help="Nom du fichier de sortie."),
         force_download: bool = typer.Option(False, help="Force le téléchargement du jeu de données."),
         max_length: int = typer.Option(100_000, help="Taille maximale du dataset"),
@@ -85,12 +86,9 @@ def download(
         force_download (bool): Force le téléchargement du jeu de données.
         max_length (int): Taille maximale du dataset.
     """
-    # Récupère le nom du fichier
-    input_filename = kaggle_dataset.split('/')[1]
-    input_filename = input_filename.replace('-', '_')
 
     # Crée les chemins
-    input_path = DATA_PATH / f'{input_filename}.csv'
+    input_path = DATA_PATH / f'{input_filename}'
     output_path = DATA_PATH / f'{output_filename}'
 
     if not input_path.exists() or force_download:
@@ -106,8 +104,13 @@ def download(
         )
 
     # Charge le dataset
-    dataframe = polars.read_csv(input_path, has_header=False)
-    dataframe = preprocess_dataframe(dataframe, max_length=max_length)
+    dataframe = polars.read_csv(input_path)
+    dataframe = preprocess_dataframe(
+        dataframe=dataframe,
+        max_length=max_length,
+        fen_column='FEN',
+        score_column='Evaluation'
+    )
     dataframe.write_parquet(output_path)
 
 

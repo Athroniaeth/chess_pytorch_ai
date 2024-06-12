@@ -20,10 +20,10 @@ def preprocess_dataframe(
         max_length: int = 100_000,
 ):
     """
-    Prétraite le DataFrame pour le transformer en un format utilisable par le modèle.
+    Pré-traite le DataFrame pour le transformer en un format utilisable par le modèle.
 
     Args:
-        dataframe (polars.DataFrame): DataFrame à prétraiter.
+        dataframe (polars.DataFrame): DataFrame à pré-traiter.
         fen_column (str): Nom de la colonne contenant les FEN. Defaults to "column_1".
         score_column (str): Nom de la colonne contenant les scores. Defaults to "column_2".
         max_length (int): Taille maximale du DataFrame. Defaults to 100_000.
@@ -38,10 +38,15 @@ def preprocess_dataframe(
     expression = polars.col(fen_column).map_elements(fen_to_array, return_dtype=polars.List(polars.UInt8))
     dataframe = dataframe.with_columns(expression)
 
-    # Convertit le dtype string de 'score' en dtype float
-    expression = polars.col(score_column).str.replace(" ", "").cast(polars.Float32)
+    # Le dataset contient '#+0' ou '#-0' dans score quand il y'a un mat, on remplace par le maximum de la couleur
+    expression = polars.when(
+        polars.col(score_column).str.contains('#+')).then(polars.lit('+15319')).when(
+        polars.col(score_column).str.contains('#-')).then(polars.lit('-15312')).otherwise(polars.col(score_column)).alias(score_column)
+
+    dataframe = dataframe.with_columns(expression)
 
     # Convertit le dtype string de 'score' en dtype float
+    expression = polars.col(score_column).cast(polars.Int16)
     dataframe = dataframe.with_columns(expression)
 
     # Renomme les colonnes en 'fen' et 'score'
