@@ -3,10 +3,9 @@ import statistics
 from typing import Literal, Type
 
 import torch
-import typer
 from torch import nn
 from torch.nn.modules.loss import _Loss
-from torch.optim import lr_scheduler, Optimizer
+from torch.optim import Optimizer
 from torch.optim.lr_scheduler import LRScheduler, LinearLR
 from torch.utils.data import DataLoader
 from tqdm import tqdm
@@ -72,7 +71,7 @@ def train_model(
             loss.backward()
             optimizer.step()
 
-            pbar.set_description(f"Epochs: {epoch+1}/{num_epochs}  -  Loss: {loss.item():.1e}")
+            pbar.set_description(f"Epochs: {epoch + 1}/{num_epochs}  -  Loss: {loss.item():.1e}")
             list_loss.append(loss.item())
 
         scheduler.step()
@@ -82,10 +81,10 @@ def train_model(
         tests_score = check_accuracy(tests_loader, model, tolerance)
 
         avg_loss = statistics.mean(list_loss)
-        tqdm.write(f"Epochs: {epoch+1}/{num_epochs}  -  Loss: {avg_loss:.1e}  -  Train Accuracy: {train_score:.2f}%  -  Tests Accuracy: {tests_score:.2f}%")
+        tqdm.write(f"Epochs: {epoch + 1}/{num_epochs}  -  Loss: {avg_loss:.1e}  -  Train Accuracy: {train_score:.2f}%  -  Tests Accuracy: {tests_score:.2f}%")
 
         # Sauvegarde le modèle
-        path = MODEL_PATH / f"model_{epoch+1}.pth"
+        path = MODEL_PATH / f"model_{epoch + 1}.pth"
         torch.save(model.state_dict(), path)
 
     # Affiche les derniers scores sur tout le dataset (tout les batchs)
@@ -117,7 +116,9 @@ def check_accuracy(
 
             predictions = model(x)
 
-            num_correct, num_samples = _calcul_accuracy(predictions, y, tolerance)
+            _num_correct, _num_samples = _calcul_accuracy(predictions, y, tolerance)
+            num_correct += _num_correct
+            num_samples += _num_samples
 
     calcul = num_correct / num_samples * 100
 
