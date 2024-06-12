@@ -7,4 +7,5 @@ ENV_PATH = PROJECT_PATH / '.env'
 
 # Variables globales du projet
 DATA_PATH = PROJECT_PATH / 'data'
+MODEL_PATH = PROJECT_PATH / 'models'
 KAGGLE_CONFIG_PATH = Path.home() / '.kaggle' / 'kaggle.json'
