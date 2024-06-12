@@ -12,7 +12,7 @@ def generator_pieces() -> Generator[ProductPiece, None, None]:
     return itertools.product(chess.PIECE_TYPES, chess.COLORS)
 
 
-def fen_to_array(fen: str) -> np.ndarray:
+def fen_to_array(fen: str) -> Tuple[np.uint8]:
     """
     Convertit un code FEN en tableau numpy.
 
@@ -71,7 +71,8 @@ def fen_to_array(fen: str) -> np.ndarray:
         array_en_passant
     ])
 
-    return array
+    array = array.astype(numpy.uint8)
+    return tuple(array)
 
 
 def _get_board_array(board: chess.Board) -> np.ndarray:
