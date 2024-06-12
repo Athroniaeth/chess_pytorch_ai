@@ -1,7 +1,9 @@
+import contextlib
 import json
 import logging
 import os
-from typing import Optional
+import time
+from typing import Optional, Generator, Any
 
 from dotenv import load_dotenv
 
@@ -45,3 +47,21 @@ def load_dotenv_kaggle(
 
     KAGGLE_CONFIG_PATH.touch()
     KAGGLE_CONFIG_PATH.write_text(json_content)
+
+
+@contextlib.contextmanager
+def logging_time(name: str):
+    """
+    Log the time taken to execute a function.
+
+    Args:
+        name (str): Name of the function.
+
+    Yields:
+        typing.Generator[None, None, None]: Generator object.
+    """
+    start = time.time()
+    yield
+    end = time.time()
+
+    logging.info(f"'{name}' executed in {end - start:.2f} seconds.")
