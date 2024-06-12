@@ -65,7 +65,7 @@ def callback(
 
 @cli.command()
 def download(
-        kaggle_dataset: str = typer.Option('antoinecastel/fen-to-stockfish-evaluation', help="Nom du jeu de données Kaggle à télécharger."),
+        kaggle_dataset: str = typer.Option('ronakbadhe/chess-evaluations', help="Nom du jeu de données Kaggle à télécharger."),
         kaggle_username: str = typer.Option(None, envvar="KAGGLE_USERNAME", help="Nom d'utilisateur à l'API Kaggle."),
         kaggle_key: str = typer.Option(None, envvar="KAGGLE_KEY", help="Token d'accès à l'API Kaggle."),
 
