@@ -64,11 +64,11 @@ class ChessDataset(Dataset):
     """
 
     def __init__(self, preprocess_df: polars.DataFrame):
-        self.min_val = preprocess_df['score'].min()
+        """self.min_val = preprocess_df['score'].min()
         self.max_val = preprocess_df['score'].max()
 
         expression = (polars.col('score') - self.min_val) / (self.max_val - self.min_val)
-        preprocess_df = preprocess_df.with_columns(expression)
+        preprocess_df = preprocess_df.with_columns(expression)"""
 
         self.dataframe = preprocess_df
 

@@ -25,10 +25,10 @@ def train_model(
         device: Literal['cpu', 'cuda'] = 'cuda',
 
         optimizer: Type[Optimizer] = torch.optim.Adam,
-        criterion: Type[_Loss] = nn.MSELoss,
+        metric: Metric = MeanAbsoluteError,
+        criterion: _Loss = nn.MSELoss,
 
         lr: float = 1e-4,
-        metric: Type[Metric] = MeanAbsoluteError,
 
         scheduler: Type[LRScheduler] = LinearLR,
         start_factor: float = 1.0,
@@ -45,9 +45,6 @@ def train_model(
     optimizer = optimizer(model.parameters(), lr=lr)
 
     # noinspection PyArgumentList
-    criterion = criterion()
-
-    # noinspection PyArgumentList
     scheduler = scheduler(
         optimizer=optimizer,
         start_factor=start_factor,
@@ -55,7 +52,7 @@ def train_model(
         total_iters=total_iters
     )
 
-    metric = metric().to(device)
+    metric = metric.to(device)
     metric_name = metric.__class__.__name__
 
     # Entraîne le modèle
